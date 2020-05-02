@@ -54,7 +54,7 @@ func AesDecrypt(text, key string) (string, error) {
 	return string(orig), nil
 }
 func main() {
-	orig := "http://c.biancheng.net/golang/"
+	orig := "http://liuqiqi/golang/"
 	key := "123456781234567812345678"
 	fmt.Println("原文：", orig)
 	encryptCode, _ := AesEncrypt(orig, key)

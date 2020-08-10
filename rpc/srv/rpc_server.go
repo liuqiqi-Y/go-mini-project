@@ -3,13 +3,14 @@ package main
 import (
 	"net"
 	"net/rpc"
+	"net/rpc/jsonrpc"
 )
 
 const HelloServiceName = "path/to/pkg.HelloService"
 
 // 服务接口
 type HelloServiceInterface = interface {
-	Hello(request string, reply *string) error
+	Hello(request *String, reply *String) error
 }
 
 // 服务注册
@@ -20,8 +21,8 @@ func RegisterHelloService(hello HelloServiceInterface) error {
 // 服务实体
 type HelloService struct{}
 
-func (h *HelloService) Hello(request string, reply *string) error {
-	*reply = "Hello " + request + "!"
+func (h *HelloService) Hello(request *String, reply *String) error {
+	reply.Value = "Hello " + request.GetValue() + "!"
 	return nil
 }
 
@@ -41,6 +42,7 @@ func main() {
 		if err != nil {
 			panic("接受客户端连接失败: " + err.Error())
 		}
-		go rpc.ServeConn(conn)
+		//go rpc.ServeConn(conn)
+		rpc.ServeCodec(jsonrpc.NewServerCodec(conn))
 	}
 }

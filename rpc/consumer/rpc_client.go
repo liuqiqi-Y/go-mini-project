@@ -2,30 +2,34 @@ package main
 
 import (
 	"fmt"
+	"net"
 	"net/rpc"
+	"net/rpc/jsonrpc"
 )
 
 const HelloServiceName = "path/to/pkg.HelloService"
 
 type HelloServiceInterface = interface {
-	Hello(request string, reply *string) error
+	Hello(request *String, reply *String) error
 }
 type HelloServiceClient struct {
 	*rpc.Client
 }
 
-func (h *HelloServiceClient) Hello(request string, reply *string) error {
+func (h *HelloServiceClient) Hello(request *String, reply *String) error {
 	return h.Call(HelloServiceName+".Hello", request, reply)
 }
 
 var _ HelloServiceInterface = (*HelloServiceClient)(nil)
 
-func DialHelloService(net, address string) (*HelloServiceClient, error) {
-	conn, err := rpc.Dial(net, address)
+func DialHelloService(tcp, address string) (*HelloServiceClient, error) {
+	//conn, err := rpc.Dial(net, address)
+	conn, err := net.Dial(tcp, address)
 	if err != nil {
 		return nil, err
 	}
-	return &HelloServiceClient{conn}, nil
+	client := rpc.NewClientWithCodec(jsonrpc.NewClientCodec(conn))
+	return &HelloServiceClient{client}, nil
 }
 
 func main() {
@@ -33,11 +37,13 @@ func main() {
 	if err != nil {
 		panic("建立连接失败: " + err.Error())
 	}
-	var reply string
-	err = conn.Hello("WANG", &reply)
+	//var reply string
+	var reply String
+	request := String{Value: "WANG"}
+	err = conn.Hello(&request, &reply)
 	if err != nil {
 		fmt.Printf("请求远程服务失败: %s\n", err.Error())
 		return
 	}
-	fmt.Println(reply)
+	fmt.Println(reply.Value)
 }

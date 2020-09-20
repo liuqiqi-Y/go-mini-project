@@ -1,14 +1,20 @@
 package main
 
+import (
+	"go-mini-project/proxy/agent"
+	"go-mini-project/proxy/client"
+	"go-mini-project/proxy/server"
+)
+
 func main() {
-	servers := newServers(":9998", ":9999")
+	servers := server.NewServers(":9997", ":9998", ":9999")
 	for _, s := range servers {
-		go s.run()
+		go s.Run()
 	}
-	p := newProxy(":9000", ":9999")
-	go p.run()
-	for _, c := range newClient(":9000", 3) {
-		go c.run()
+	p := agent.NewAgent(":9000", ":9997", ":9998", ":9999")
+	go p.Run()
+	for _, c := range client.NewClients(":9000", 3) {
+		go c.Send()
 	}
 	select {}
 }

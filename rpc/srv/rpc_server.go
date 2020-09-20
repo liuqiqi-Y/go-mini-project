@@ -13,11 +13,6 @@ type HelloServiceInterface = interface {
 	Hello(request *String, reply *String) error
 }
 
-// 服务注册
-func RegisterHelloService(hello HelloServiceInterface) error {
-	return rpc.RegisterName(HelloServiceName, hello)
-}
-
 // 服务实体
 type HelloService struct{}
 
@@ -29,6 +24,10 @@ func (h *HelloService) Hello(request *String, reply *String) error {
 // 验证服务实体实现了服务接口
 var _ HelloServiceInterface = (*HelloService)(nil)
 
+// 服务注册
+func RegisterHelloService(hello HelloServiceInterface) error {
+	return rpc.RegisterName(HelloServiceName, hello)
+}
 func main() {
 	if err := RegisterHelloService(&HelloService{}); err != nil {
 		panic("注册服务失败: " + err.Error())

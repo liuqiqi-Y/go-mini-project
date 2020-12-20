@@ -13,7 +13,7 @@ func main() {
 	}
 	p := agent.NewAgent(":9000", ":9997", ":9998", ":9999")
 	go p.Run()
-	for _, c := range client.NewClients(":9000", 3) {
+	for _, c := range client.NewClients(":9000", 1) {
 		go c.Send()
 	}
 	select {}

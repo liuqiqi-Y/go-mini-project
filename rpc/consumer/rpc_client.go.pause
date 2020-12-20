@@ -17,7 +17,7 @@ type HelloServiceClient struct {
 }
 
 func (h *HelloServiceClient) Hello(request *String, reply *String) error {
-	return h.Call(HelloServiceName+".Hello", request, reply)
+	return h.Call(HelloServiceName+".Hello", request, reply) //并发安全
 }
 
 var _ HelloServiceInterface = (*HelloServiceClient)(nil)

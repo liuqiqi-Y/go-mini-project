@@ -21,16 +21,17 @@ func NewClients(proxy string, n int) []*Client {
 	return clients
 }
 func (c *Client) Send() {
-	_, err := c.cli.Write([]byte(fmt.Sprintf("$$$message from %s", c.cli.LocalAddr().String())))
+	_, err := c.cli.Write([]byte(fmt.Sprintf("$$$message from %sxxx", c.cli.LocalAddr().String())))
 	if err != nil {
 		panic(err)
 	}
-	input := make([]byte, 1024)
+	input := make([]byte, 512)
 	bytes, err := c.cli.Read(input)
 	if bytes > 0 {
-		fmt.Println(string(input))
+		fmt.Println(string(input), " len:", bytes)
 	}
 	if err != nil {
 		panic(err)
 	}
+	//c.cli.Close()
 }

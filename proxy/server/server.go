@@ -35,8 +35,9 @@ func handler(conn net.Conn) {
 	for {
 		input := make([]byte, 1024)
 		bytes, err := conn.Read(input)
+
 		if bytes > 0 {
-			_, err := conn.Write([]byte(fmt.Sprintf("$$$response for %s", string(input))))
+			_, err := conn.Write([]byte(fmt.Sprintf("$$$response from %s for %s", conn.LocalAddr().String(), string(input))))
 			if err != nil {
 				panic(err)
 			}

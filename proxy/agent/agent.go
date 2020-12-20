@@ -38,6 +38,7 @@ func (a *Agent) Run() {
 			panic(err)
 		}
 		go handler(conn1, conn2)
+		i++
 	}
 }
 func handler(a net.Conn, b net.Conn) {

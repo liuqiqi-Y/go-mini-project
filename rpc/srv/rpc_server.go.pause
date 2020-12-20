@@ -10,13 +10,13 @@ const HelloServiceName = "path/to/pkg.HelloService"
 
 // 服务接口
 type HelloServiceInterface = interface {
-	Hello(request *String, reply *String) error
+	Hello(request String, reply *String) error
 }
 
 // 服务实体
 type HelloService struct{}
 
-func (h *HelloService) Hello(request *String, reply *String) error {
+func (h *HelloService) Hello(request String, reply *String) error {
 	reply.Value = "Hello " + request.GetValue() + "!"
 	return nil
 }
@@ -42,6 +42,6 @@ func main() {
 			panic("接受客户端连接失败: " + err.Error())
 		}
 		//go rpc.ServeConn(conn)
-		rpc.ServeCodec(jsonrpc.NewServerCodec(conn))
+		go rpc.ServeCodec(jsonrpc.NewServerCodec(conn))
 	}
 }

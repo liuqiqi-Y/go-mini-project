@@ -7,6 +7,7 @@ import (
 	"net"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 type HelloServiceImpl struct {
@@ -43,7 +44,11 @@ func (p *HelloServiceImpl) Channel(stream HelloService_ChannelServer) error {
 	}
 }
 func main() {
-	grpcServer := grpc.NewServer()
+	creds, err := credentials.NewServerTLSFromFile("server.crt", "server.key")
+	if err != nil {
+		log.Fatal(err)
+	}
+	grpcServer := grpc.NewServer(grpc.Creds(creds))
 	RegisterHelloServiceServer(grpcServer, new(HelloServiceImpl))
 	lis, err := net.Listen("tcp", ":8899")
 	if err != nil {
